@@ -1,15 +1,15 @@
-*specto-nvim.txt*               For               Last change: 2024 January 14
+*specto-nvim.txt*       For Neovim >= 0.8.0       Last change: 2024 January 14
 
 ==============================================================================
 Table of Contents                              *specto-nvim-table-of-contents*
 
-1. specto.nvim                                       |specto-nvim-specto.nvim|
+1. Specto.nvim                                       |specto-nvim-specto.nvim|
   - Installation                        |specto-nvim-specto.nvim-installation|
   - Usage                                      |specto-nvim-specto.nvim-usage|
   - Configuration                      |specto-nvim-specto.nvim-configuration|
 
 ==============================================================================
-1. specto.nvim                                       *specto-nvim-specto.nvim*
+1. Specto.nvim                                       *specto-nvim-specto.nvim*
 
 
   _specto_ is an abbreviation for _spec toggler_.
@@ -27,7 +27,11 @@ Install the plugin with your preferred package manager:
 LAZY.NVIM ~
 
 >lua
-    { "cange/specto.nvim", opts = {}, dependencies = "nvim-treesitter/nvim-treesitter" }
+    {
+      "cange/specto.nvim",
+      dependencies = "nvim-treesitter/nvim-treesitter",
+      opts = {}
+    }
 <
 
 

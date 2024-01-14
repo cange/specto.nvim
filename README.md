@@ -1,4 +1,4 @@
-# specto.nvim
+# Specto.nvim
 
 > _specto_ is an abbreviation for _spec toggler_.
 
@@ -14,7 +14,11 @@ Install the plugin with your preferred package manager:
 ### [lazy.nvim](https://github.com/folke/lazy.nvim)
 
 ```lua
-{ "cange/specto.nvim", opts = {}, dependencies = "nvim-treesitter/nvim-treesitter" }
+{
+  "cange/specto.nvim",
+  dependencies = "nvim-treesitter/nvim-treesitter",
+  opts = {}
+}
 ```
 
 ## Usage
