@@ -1,0 +1,35 @@
+---
+name: Bug Report
+description: Report a problem with specto.nvim
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: "**Before reporting:** Make sure to read the [documentation](https://github.com/cange/specto.nvim/blob/main/README.md) and search [existing issues](https://github.com/cange/specto.nvim/issues)."
+  - type: textarea
+    attributes:
+      label: Problem
+      description: |
+        Describe the current behavior. Include images, or videos if possible.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Reproduction steps
+      description: How can the issue be reproduced?
+      placeholder: Describe each step as precisely as possible
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Expected behavior
+      description: Describe the behavior you expect.
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Neovim Version
+      description: In your terminal, run `nvim --version`
+      placeholder: e.g. 0.9.5
+    validations:
+      required: true
