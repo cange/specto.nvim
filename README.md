@@ -1,11 +1,17 @@
+<div align="center">
+
 # Specto.nvim
 
-> _specto_ is an abbreviation for _spec toggler_.
+[![Lua](https://img.shields.io/badge/Lua-blue.svg?style=for-the-badge&logo=lua)](http://www.lua.org)
+[![Neovim](https://img.shields.io/badge/Neovim%200.9+-green.svg?style=for-the-badge&logo=neovim)](https://neovim.io)
 
-Specto provides an easy way toggle certain feature for tespt blocks.
-Specto makes it easy to toggle certain test blocks on and off, depending on the
-language and test framework functionality, so that they can be executed "only"
-certain or "skipped".
+</div>
+
+Specto makes it easy to switch certain test blocks on and off depending on the
+language and test framework functionality, so that they can be "only" executed
+or "skipped".
+
+> _specto_ is an abbreviation for _spec toggler_.
 
 ## Installation
 
@@ -74,6 +80,8 @@ languages = {
   -- ... other languages
 }
 ```
+
+See [config.lua](./lua/specto/config.lua) for more details.
 
 ### Language Settings
 

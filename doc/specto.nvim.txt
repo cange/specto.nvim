@@ -1,25 +1,20 @@
-*specto-nvim.txt*       For Neovim >= 0.8.0       Last change: 2024 January 14
+*specto.nvim.txt*       For Neovim >= 0.9.0       Last change: 2024 January 19
 
 ==============================================================================
-Table of Contents                              *specto-nvim-table-of-contents*
+Table of Contents                              *specto.nvim-table-of-contents*
 
-1. Specto.nvim                                       |specto-nvim-specto.nvim|
-  - Installation                        |specto-nvim-specto.nvim-installation|
-  - Usage                                      |specto-nvim-specto.nvim-usage|
-  - Configuration                      |specto-nvim-specto.nvim-configuration|
+  - Installation                                    |specto.nvim-installation|
+  - Usage                                                  |specto.nvim-usage|
+  - Configuration                                  |specto.nvim-configuration|
 
-==============================================================================
-1. Specto.nvim                                       *specto-nvim-specto.nvim*
+Specto makes it easy to switch certain test blocks on and off depending on the
+language and test framework functionality, so that they can be "only" executed
+or "skipped".
 
 
   _specto_ is an abbreviation for _spec toggler_.
-Specto provides an easy way toggle certain feature for tespt blocks. Specto
-makes it easy to toggle certain test blocks on and off, depending on the
-language and test framework functionality, so that they can be executed "only"
-certain or "skipped".
 
-
-INSTALLATION                            *specto-nvim-specto.nvim-installation*
+INSTALLATION                                        *specto.nvim-installation*
 
 Install the plugin with your preferred package manager:
 
@@ -35,10 +30,10 @@ LAZY.NVIM ~
 <
 
 
-USAGE                                          *specto-nvim-specto.nvim-usage*
+USAGE                                                      *specto.nvim-usage*
 
 Allows to toggle certain tests blocks with a `only` or `skip` flag (see
-|specto-nvim-supported-language|).
+|specto.nvim-supported-language|).
 
 Calling one of the following within a spec block such as `it(…)`
 
@@ -79,7 +74,7 @@ within a test block or used via keybinding.
 <
 
 
-CONFIGURATION                          *specto-nvim-specto.nvim-configuration*
+CONFIGURATION                                      *specto.nvim-configuration*
 
 Specto comes with the following defaults:
 
@@ -92,6 +87,8 @@ Specto comes with the following defaults:
       -- ... other languages
     }
 <
+
+See config.lua <./lua/specto/config.lua> for more details.
 
 
 LANGUAGE SETTINGS ~
