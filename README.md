@@ -11,8 +11,6 @@ Specto makes it easy to switch certain test blocks on and off depending on the
 language and test framework functionality, so that they can be "only" executed
 or "skipped".
 
-> _specto_ is an abbreviation for _spec toggler_.
-
 ## Installation
 
 Install the plugin with your preferred package manager:
@@ -67,12 +65,28 @@ vim.keymap.set("n", "<leader>to", "<cmd>Specto toggle only<CR>" )
 vim.keymap.set("n", "<leader>ts", "<cmd>Specto toggle skip<CR>" )
 ```
 
+### Scope
+
+Triggering a toggle only applies to the block in which the cursor is currently
+located.
+
+```js
+describe('context', () => {
+  // ↓ toggle applies here
+  it.skip('something', () => {
+    expect(█)
+    //     ↳  cursor here
+  })
+})
+```
+
 ## Configuration
 
 Specto comes with the following defaults:
 
 ```lua
 languages = {
+  -- set default config for all defined languages
   ["*"] = {
     file_patterns = {},
     features = {},

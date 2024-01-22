@@ -1,4 +1,4 @@
-*specto.nvim.txt*       For Neovim >= 0.9.0       Last change: 2024 January 19
+*specto.nvim.txt*       For Neovim >= 0.9.0       Last change: 2024 January 22
 
 ==============================================================================
 Table of Contents                              *specto.nvim-table-of-contents*
@@ -11,8 +11,6 @@ Specto makes it easy to switch certain test blocks on and off depending on the
 language and test framework functionality, so that they can be "only" executed
 or "skipped".
 
-
-  _specto_ is an abbreviation for _spec toggler_.
 
 INSTALLATION                                        *specto.nvim-installation*
 
@@ -74,12 +72,29 @@ within a test block or used via keybinding.
 <
 
 
+SCOPE ~
+
+Triggering a toggle only applies to the block in which the cursor is currently
+located.
+
+>js
+    describe('context', () => {
+      // ↓ toggle applies here
+      it.skip('something', () => {
+        expect(█)
+        //     ↳  cursor here
+      })
+    })
+<
+
+
 CONFIGURATION                                      *specto.nvim-configuration*
 
 Specto comes with the following defaults:
 
 >lua
     languages = {
+      -- set default config for all defined languages
       ["*"] = {
         file_patterns = {},
         features = {},
