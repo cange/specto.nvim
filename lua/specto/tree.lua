@@ -36,6 +36,8 @@ end
 ---@field start_col number
 ---@field end_col number
 
+-- luacheck: push ignore 212
+
 ---@param node TSNode
 ---@param content string
 ---@param range? SpectoColumnRange
@@ -49,6 +51,8 @@ end
 ---@param node TSNode
 ---@return string
 function Tree:get_node_name(node) return vim.treesitter.get_node_text(node, 0) end
+
+-- luacheck: pop
 
 ---@param node TSNode
 ---@return boolean
