@@ -15,15 +15,15 @@ end
 ---@param type SpectoType
 ---@return boolean
 local function supported(type)
-  local language = Util.get_buf_lang()
-  local config = Config.lang_config
+  local filetype = vim.bo.filetype
+  local config = Config.filetype_config
   local has_features = config ~= nil and config.features ~= nil
-  local msg = not has_features and string.format("%q is not supported!", language) or ""
+  local msg = not has_features and string.format("%q is not supported!", filetype) or ""
 
   if #msg == 0 and not has_filen_ame_support(config.file_patterns) then
     msg = string.format("File name %q is not supported!", vim.fn.expand("%:t"))
   end
-  if #msg == 0 and not config.features[type] then msg = string.format('"%s()" does not support %q!', type, language) end
+  if #msg == 0 and not config.features[type] then msg = string.format('"%s()" does not support %q!', type, filetype) end
 
   local is_supported = #msg == 0
   if not is_supported then Util.notify(msg) end
@@ -32,12 +32,11 @@ end
 
 ---@param type SpectoType
 local function setup(type)
-  Config.set_config(Util.get_buf_lang(), Config.languages)
   if not supported(type) then return end
 
-  local lang_config = Config.lang_config
-  local feature = lang_config.features[type]
-  local tree = Tree:new(type, lang_config)
+  local ft_config = Config.filetype_config
+  local feature = ft_config.features[type]
+  local tree = Tree:new(type, ft_config)
   local node = tree:get_node()
   if not node then return end
 
