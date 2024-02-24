@@ -15,6 +15,12 @@
 local M = {}
 
 local defaults = {
+  exclude = {
+    filetypes = {
+      "",
+      "help",
+    },
+  },
   languages = {
     ["*"] = {
       filetypes = {},
@@ -70,6 +76,7 @@ end
 ---Updates configuration for the current buffer's filetype.
 function M.refresh()
   local ft = vim.bo.filetype
+  if #ft == 0 or vim.tbl_contains(options.exclude.filetypes, ft) then return end
 
   local config = M.get_config(ft)
   if not config then return end
