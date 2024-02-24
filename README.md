@@ -85,14 +85,23 @@ describe('context', () => {
 Specto comes with the following defaults:
 
 ```lua
-languages = {
-  -- set default config for all defined languages
-  ["*"] = {
-    file_patterns = {},
-    features = {},
+require("specto").setup({ -- BEGIN_DEFAULT_OPTS
+  exclude = {
+    filetypes = { -- exclude certain files by default
+      "",
+      "help",
+    }
   },
-  -- ... other languages
-}
+  languages = {
+    -- set default config for all defined languages
+    ["*"] = {
+      filetypes = {},
+      file_patterns = {},
+      features = {},
+    },
+    -- ... other languages
+  }
+})
 ```
 
 See [config.lua](./lua/specto/config.lua) for more details.
@@ -103,6 +112,8 @@ Each language can be define an individual set for `only` and `skip` features.
 
 ```lua
 <LANUGAGE_NAME> = { -- eg. javascript
+  filetypes = { "javascript", "typescript" }, -- a subset of supported language
+
   -- Files or directories where tests can be found.
   -- Expects an array of string patterns that can be used with `string.match`.
   file_patterns = {  }, -- eg. `{ "__tests__/", "%.?spec%." }`
@@ -122,8 +133,7 @@ Each language can be define an individual set for `only` and `skip` features.
 
 List of supported languages and their dedicated DSLs (eg. `it`, `describe`, `test`).
 
-| Language     |  DSL  | Features   | Examples            |
-| ------------ | :---: | ---------- | ------------------- |
-| `javascript` | jest  | only, skip | `it.only`,`it.skip` |
-| `typescript` | jest  | only, skip | `it.only`,`it.skip` |
-| `ryby`       | rspec | skip       | `xit`               |
+| Language                  |  DSL  | Features   | Examples            |
+| ------------------------- | :---: | ---------- | ------------------- |
+| `javascript`/`typescript` | jest  | only, skip | `it.only`,`it.skip` |
+| `ryby`                    | rspec | skip       | `xit`               |
