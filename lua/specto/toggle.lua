@@ -4,7 +4,7 @@ local Tree = require("specto.tree")
 
 ---@param patterns string[]|nil
 ---@return boolean
-local function has_filen_ame_support(patterns)
+local function has_file_name_support(patterns)
   if patterns == nil then return false end
   for _, p in ipairs(patterns) do
     if vim.fn.expand("%"):match(p) then return true end
@@ -20,7 +20,7 @@ local function supported(type)
   local has_features = config ~= nil and config.features ~= nil
   local msg = not has_features and string.format("%q is not supported!", filetype) or ""
 
-  if #msg == 0 and not has_filen_ame_support(config.file_patterns) then
+  if #msg == 0 and not has_file_name_support(config.file_patterns) then
     msg = string.format("File name %q is not supported!", vim.fn.expand("%:t"))
   end
   if #msg == 0 and not config.features[type] then msg = string.format('"%s()" does not support %q!', type, filetype) end

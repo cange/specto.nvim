@@ -1,5 +1,7 @@
+local M = {}
+
 ---@param opts {args: string}
-local command = function(opts)
+local function command(opts)
   opts = opts or { args = "" }
   local params = vim.split(opts.args, "%s+", { trimempty = true })
 
@@ -13,7 +15,7 @@ local command = function(opts)
   if ok then context[action_name]() end
 end
 
-local cmd_opts = {
+local options = {
   nargs = "?",
   complete = function(_, cmd_line)
     local store = {
@@ -39,6 +41,7 @@ local cmd_opts = {
   end,
 }
 
-return {
-  setup = function() vim.api.nvim_create_user_command("Specto", command, cmd_opts) end,
-}
+---Initializes the Specto command.
+function M.setup() vim.api.nvim_create_user_command("Specto", command, options) end
+
+return M
