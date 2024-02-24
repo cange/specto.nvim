@@ -1,11 +1,5 @@
 local M = {}
 
-function M.get_buf_lang()
-  local lang = vim.api.nvim_buf_get_option(vim.api.nvim_get_current_buf(), "filetype")
-  assert(lang or #lang > 0, '[specto] "lang" is not defined!')
-  return lang
-end
-
 ---@param feature SpectoFeature
 ---@param keyword? string
 ---@return string

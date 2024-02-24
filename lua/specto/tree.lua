@@ -24,10 +24,10 @@ local Tree = {}
 Tree.__index = Tree
 
 ---@param type SpectoType
----@param lang_config SpectoLanguage
+---@param ft_config SpectoFiletype
 ---@return SpectoTree
-function Tree:new(type, lang_config)
-  local keywords = get_keywords(type, lang_config.features)
+function Tree:new(type, ft_config)
+  local keywords = get_keywords(type, ft_config.features)
   assert(keywords, "[specto] keywords are not defined!")
   return setmetatable({ type = type, keywords = keywords }, self)
 end

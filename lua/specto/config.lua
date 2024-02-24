@@ -1,4 +1,4 @@
----@class SpectoLanguage
+---@class SpectoFiletype
 ---@field file_patterns string[] expects a table of *string-match* patterns.
 ---@field features table<SpectoFeature>
 
@@ -17,27 +17,12 @@ local M = {}
 local defaults = {
   languages = {
     ["*"] = {
+      filetypes = {},
       file_patterns = {},
       features = {},
     },
     javascript = {
-      file_patterns = { "__tests__/", "%.?test%.", "%.?spec%." },
-      features = {
-        skip = {
-          flag = "skip",
-          keywords = { "it", "describe", "test" },
-          prefix = false,
-          separator = ".",
-        },
-        only = {
-          flag = "only",
-          keywords = { "it", "describe", "test" },
-          prefix = false,
-          separator = ".",
-        },
-      },
-    },
-    typescript = {
+      filetypes = { "javascript", "typescript" },
       file_patterns = { "__tests__/", "%.?test%.", "%.?spec%." },
       features = {
         skip = {
@@ -69,28 +54,53 @@ local defaults = {
 }
 
 ---@type SpectoConfig
-local options
+local options = defaults
+local augroup_id
 
+---Provides the configuration for a given filetype.
+---@param filetype string
+---@return SpectoFiletype|nil
+function M.get_config(filetype)
+  for lang, config in pairs(options.languages) do
+    if lang == filetype or vim.tbl_contains(config.filetypes or {}, filetype) then return config end
+  end
+  return nil
+end
+
+---Updates configuration for the current buffer's filetype.
+function M.refresh()
+  local ft = vim.bo.filetype
+
+  local config = M.get_config(ft)
+  if not config then return end
+
+  M.filetype_config = {
+    file_patterns = config.file_patterns or nil,
+    features = vim.tbl_deep_extend("force", options.languages["*"].features, config.features),
+    config,
+  }
+end
+
+---Evaluates the current buffer's filetype and refreshes the configuration.
+function M.auto_detection()
+  M.refresh()
+  augroup_id = vim.api.nvim_create_augroup("SpectoSetup", { clear = true })
+  vim.api.nvim_create_autocmd({ "BufEnter" }, {
+    group = augroup_id,
+    desc = "Refresh Specto config on BufEnter",
+    callback = function() M.refresh() end,
+  })
+end
+
+---@return SpectoFiletype|nil
+M.filetype_config = nil
+
+---Sets up the configuration for Specto.
 ---@param opts? SpectoConfig
 function M.setup(opts)
   opts = opts or {}
   options = vim.tbl_deep_extend("force", {}, defaults, opts or {})
-end
-
----@return SpectoLanguage|nil
-M.lang_config = nil
-
----Set the language configuration.
----@param lang_name string
----@param lang_configs SpectoLanguage[]
-function M.set_config(lang_name, lang_configs)
-  local lang_config = lang_configs[lang_name]
-  if not lang_config then return end
-
-  M.lang_config = {
-    file_patterns = lang_config.file_patterns or nil,
-    features = vim.tbl_deep_extend("force", lang_configs["*"].features, lang_config.features),
-  }
+  M.auto_detection()
 end
 
 return setmetatable(M, {
