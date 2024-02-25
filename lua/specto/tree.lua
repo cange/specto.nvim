@@ -29,7 +29,11 @@ Tree.__index = Tree
 function Tree:new(type, ft_config)
   local keywords = get_keywords(type, ft_config.features)
   assert(keywords, "[specto] keywords are not defined!")
-  return setmetatable({ type = type, keywords = keywords }, self)
+  return setmetatable({
+    type = type,
+    keywords = keywords,
+    _logged = false,
+  }, self)
 end
 
 ---@class SpectoColumnRange
@@ -63,7 +67,7 @@ end
 
 ---@param node TSNode
 ---@return TSNode|nil
-function Tree:walker(node)
+function Tree:next(node)
   if not node then
     return nil
   elseif self:matches(node) then
@@ -71,12 +75,18 @@ function Tree:walker(node)
   elseif node:child_count() > 0 and self:matches(node:child()) then
     return node:child()
   end
-  local target = self:walker(node:parent())
-  if not target then Util.notify(string.format("%q no target found!", self.type)) end
+  local target = self:next(node:parent())
+  if not target and not self._notified then
+    Util.notify(string.format("%q no target found!", self.type))
+    self._notified = true
+  end
   return target
 end
 
 ---@return TSNode|nil
-function Tree:get_node() return self:walker(vim.treesitter.get_node()) end
+function Tree:get_node()
+  self._notified = false
+  return self:next(vim.treesitter.get_node())
+end
 
 return Tree
