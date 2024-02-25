@@ -42,20 +42,20 @@ local function setup(type)
 
   local flag = Util.generate_flag(feature)
   local name = tree:get_node_name(node)
+  local content, range = "", {}
 
   if feature.prefix then
-    local content = name:find("^" .. flag) == 1 and name:sub(2) or feature.flag .. name
+    content = name:find("^" .. flag) == 1 and name:sub(2) or feature.flag .. name
     tree:replace_text(node, content)
   else
     local active = name:match(flag .. "$") ~= nil
-    local content = active and vim.split(name, flag)[1] or name .. flag
+    content = active and vim.split(name, flag)[1] or name .. flag
     if active then
       local _, scol, _, ecol = node:range()
-      tree:replace_text(node, content, { start_col = scol, end_col = ecol })
-    else
-      tree:replace_text(node, content)
+      range = { start_col = scol, end_col = ecol }
     end
   end
+  tree:replace_text(node, content, range)
 end
 
 ---@class SpectoToggle
