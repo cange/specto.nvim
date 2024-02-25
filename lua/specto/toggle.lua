@@ -30,41 +30,75 @@ local function supported(type)
   return is_supported
 end
 
+---@class SpectoToggler
+local Toggle = {}
+Toggle.__index = Toggle
+
+function Toggle:new()
+  return setmetatable({
+    feature = {},
+    flag = "",
+    name = "",
+    node = nil,
+    tree = nil,
+  }, self)
+end
+
+function Toggle:handle_prefix()
+  local content = self.name:find("^" .. self.flag) == 1 and self.name:sub(2) or self.feature.flag .. self.name
+  self.tree:replace_text(self.node, content)
+end
+
+function Toggle:handle_suffix()
+  local range = {}
+  local next_text = self.tree:get_text(self.node:next_sibling())
+  local separator = self.feature.separator
+  local active_ecol = 0
+  local active = self.name:match(self.flag .. "$") ~= nil
+  local content = active and vim.split(self.name, self.flag)[1] or self.name .. self.flag
+
+  if not active and #separator and next_text == separator then
+    active = true
+    content = self.name
+    active_ecol = #self.flag
+  end
+
+  if active then
+    local _, scol, _, ecol = self.node:range()
+    range = { start_col = scol, end_col = ecol + active_ecol }
+  end
+
+  self.tree:replace_text(self.node, content, range)
+end
+
 ---@param type SpectoType
-local function setup(type)
+function Toggle:setup(type)
   if not supported(type) then return end
 
   local ft_config = Config.filetype_config
-  local feature = ft_config.features[type]
-  local tree = Tree:new(type, ft_config)
-  local node = tree:get_node()
-  if not node then return end
+  self.feature = ft_config.features[type]
+  self.tree = Tree:new(type, ft_config)
+  self.node = self.tree:get_node()
+  if not self.node then return end
 
-  local flag = Util.generate_flag(feature)
-  local name = tree:get_node_name(node)
-  local content, range = "", {}
+  self.flag = Util.generate_flag(self.feature)
+  self.name = self.tree:get_text(self.node)
 
-  if feature.prefix then
-    content = name:find("^" .. flag) == 1 and name:sub(2) or feature.flag .. name
-    tree:replace_text(node, content)
+  if self.feature.prefix then
+    self:handle_prefix()
   else
-    local active = name:match(flag .. "$") ~= nil
-    content = active and vim.split(name, flag)[1] or name .. flag
-    if active then
-      local _, scol, _, ecol = node:range()
-      range = { start_col = scol, end_col = ecol }
-    end
+    self:handle_suffix()
   end
-  tree:replace_text(node, content, range)
 end
 
 ---@class SpectoToggle
 local M = {}
+local toggle = Toggle:new()
 
 ---@example it() => it.only() => it()
-function M.only() setup("only") end
+function M.only() toggle:setup("only") end
 
 ---@example it.skip() => it() => it.skip()
-function M.skip() setup("skip") end
+function M.skip() toggle:setup("skip") end
 
 return M
