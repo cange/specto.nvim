@@ -54,7 +54,7 @@ end
 
 ---@param node TSNode
 ---@return string
-function Tree:get_node_name(node) return vim.treesitter.get_node_text(node, 0) end
+function Tree:get_text(node) return vim.treesitter.get_node_text(node, 0) end
 
 -- luacheck: pop
 
@@ -62,7 +62,7 @@ function Tree:get_node_name(node) return vim.treesitter.get_node_text(node, 0) e
 ---@return boolean
 function Tree:matches(node)
   if not node or not self.keywords then return false end
-  return vim.tbl_contains(self.keywords, self:get_node_name(node))
+  return vim.tbl_contains(self.keywords, self:get_text(node))
 end
 
 ---@param node TSNode
