@@ -5,11 +5,18 @@
 [![Lua](https://img.shields.io/badge/Lua-blue.svg?style=for-the-badge&logo=lua)](http://www.lua.org)
 [![Neovim](https://img.shields.io/badge/Neovim%200.9+-green.svg?style=for-the-badge&logo=neovim)](https://neovim.io)
 
-</div>
-
 Specto makes it easy to switch certain test blocks on and off depending on the
 language and test framework functionality, so that they can be "only" executed
 or "skipped".
+
+  <figure>
+    <video src="https://github.com/cange/specto.nvim/assets/28717/a665e41c-6d09-4a1e-92c0-5db9ad513773" type="video/mp4"></video>
+    <figcaption>
+      Move to a certain code block and use one of the provided toggles (see 
+      <a href="#usage">Usage</a>).
+    </figcaption>
+  </figure>
+</div>
 
 ## Installation
 
