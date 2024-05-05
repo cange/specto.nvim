@@ -143,4 +143,4 @@ List of supported languages and their dedicated DSLs (eg. `it`, `describe`, `tes
 | Language                  |  DSL  | Features   | Examples            |
 | ------------------------- | :---: | ---------- | ------------------- |
 | `javascript`/`typescript` | jest  | only, skip | `it.only`,`it.skip` |
-| `ryby`                    | rspec | skip       | `xit`               |
+| `ruby`                    | rspec | skip       | `xit`               |
