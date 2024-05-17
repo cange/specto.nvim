@@ -52,28 +52,29 @@ function Tree:replace_text(node, content, range)
   vim.api.nvim_buf_set_text(0, start_row, start_col, end_row, end_col, { content })
 end
 
----@param node TSNode
+---@param node TSNode|nil
 ---@return string
-function Tree:get_text(node) return vim.treesitter.get_node_text(node, 0) end
+function Tree:get_text(node)
+  if node == nil then return '' end
+  return vim.treesitter.get_node_text(node, 0)
+end
 
--- luacheck: pop
-
----@param node TSNode
+---@param node TSNode|nil
 ---@return boolean
 function Tree:matches(node)
   if not node or not self.keywords then return false end
   return vim.tbl_contains(self.keywords, self:get_text(node))
 end
 
----@param node TSNode
+---@param node TSNode|nil
 ---@return TSNode|nil
 function Tree:next(node)
   if not node then
     return nil
   elseif self:matches(node) then
     return node
-  elseif node:child_count() > 0 and self:matches(node:child()) then
-    return node:child()
+  elseif node:child_count() > 0 and self:matches(node:child(0)) then
+    return node:child(0)
   end
   local target = self:next(node:parent())
   if not target and not self._notified then
