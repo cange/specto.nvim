@@ -55,7 +55,7 @@ end
 ---@param node TSNode|nil
 ---@return string
 function Tree:get_text(node)
-  if node == nil then return '' end
+  if node == nil then return "" end
   return vim.treesitter.get_node_text(node, 0)
 end
 
