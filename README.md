@@ -68,8 +68,9 @@ The provided commands can either be called directly via `:Specto toggle *` withi
 a test block or used via keybinding.
 
 ```lua
-vim.keymap.set("n", "<leader>to", "<cmd>Specto toggle only<CR>" )
-vim.keymap.set("n", "<leader>ts", "<cmd>Specto toggle skip<CR>" )
+vim.keymap.set("n", "<leader>to", "<cmd>Specto toggle only<CR>", { desc = "Toggle test only" })
+vim.keymap.set("n", "<leader>ts", "<cmd>Specto toggle skip<CR>", { desc = "Toggle test skip" })
+vim.keymap.set("n", "<leader>tt", "<cmd>Specto toggle todo<CR>", { desc = "Toggle test todo" })
 ```
 
 ### Scope
@@ -138,9 +139,10 @@ Each language can be define an individual set for `only` and `skip` features.
 
 ### Supported Languages
 
-List of supported languages and their dedicated DSLs (eg. `it`, `describe`, `test`).
+List of supported languages and their dedicated framework DSLs (eg. `it`,
+`describe`, `test`).
 
-| Language                  |  DSL  | Features   | Examples            |
-| ------------------------- | :---: | ---------- | ------------------- |
-| `javascript`/`typescript` | jest  | only, skip | `it.only`,`it.skip` |
-| `ruby`                    | rspec | skip       | `xit`               |
+| Language                  |     DSL     | skip | only | todo |
+| ------------------------- | :---------: | :--: | :--: | :--: |
+| `javascript`/`typescript` | jest/vitest |  ✓   |  ✓   |  ✓   |
+| `ruby`                    |    rspec    |  ✓   |  ⛌   |  ⛌   |

@@ -101,4 +101,7 @@ function M.only() toggle:setup("only") end
 ---@example it.skip() => it() => it.skip()
 function M.skip() toggle:setup("skip") end
 
+---@example it.todo() => it() => it.todo()
+function M.todo() toggle:setup("todo") end
+
 return M
