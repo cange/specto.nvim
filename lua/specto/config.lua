@@ -1,19 +1,6 @@
----@class SpectoFiletype
----@field file_patterns string[] expects a table of *string-match* patterns.
----@field features table<SpectoFeature>
-
----@class SpectoFeature
----@field keywords SpectoFeatureKeywords
----@field flag string
----@field separator string
----@field prefix boolean
-
----@alias SpectoFeatureKeywords string[]
----@alias SpectoType '"only"'|'"skip"'
-
----@class SpectoConfig
 local M = {}
 
+---@type specto.Config
 local defaults = {
   exclude = {
     filetypes = {
@@ -59,13 +46,12 @@ local defaults = {
   },
 }
 
----@type SpectoConfig
 local options = defaults
 local augroup_id
 
 ---Provides the configuration for a given filetype.
 ---@param filetype string
----@return SpectoFiletype|nil
+---@return specto.ConfigFiletype|nil
 function M.get_config(filetype)
   for lang, config in pairs(options.languages) do
     if lang == filetype or vim.tbl_contains(config.filetypes or {}, filetype) then return config end
@@ -99,11 +85,11 @@ function M.auto_detection()
   })
 end
 
----@return SpectoFiletype|nil
+---@return specto.ConfigFiletype|nil
 M.filetype_config = nil
 
 ---Sets up the configuration for Specto.
----@param opts? SpectoConfig
+---@param opts? specto.Config
 function M.setup(opts)
   opts = opts or {}
   options = vim.tbl_deep_extend("force", {}, defaults, opts or {})

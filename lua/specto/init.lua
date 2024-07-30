@@ -6,7 +6,7 @@ end
 ---@class Specto
 local M = {}
 
----@param opts? SpectoConfig
+---@param opts? specto.Config
 function M.setup(opts)
   opts = opts or {}
   require("specto.config").setup(opts)

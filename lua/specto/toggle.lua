@@ -12,7 +12,7 @@ local function has_file_name_support(patterns)
   return false
 end
 
----@param type SpectoType
+---@param type specto.ToggleType
 ---@return boolean
 local function supported(type)
   local filetype = vim.bo.filetype
@@ -30,7 +30,7 @@ local function supported(type)
   return is_supported
 end
 
----@class SpectoToggler
+---@class specto.Toggler
 local Toggle = {}
 Toggle.__index = Toggle
 
@@ -71,7 +71,7 @@ function Toggle:handle_suffix()
   self.tree:replace_text(self.node, content, range)
 end
 
----@param type SpectoType
+---@param type specto.ToggleType
 function Toggle:setup(type)
   if not supported(type) then return end
 
@@ -91,7 +91,7 @@ function Toggle:setup(type)
   end
 end
 
----@class SpectoToggle
+---@class specto.Toggle
 local M = {}
 local toggle = Toggle:new()
 

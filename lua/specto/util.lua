@@ -1,6 +1,6 @@
 local M = {}
 
----@param feature SpectoFeature
+---@param feature specto.ConfigFeature
 ---@param keyword? string
 ---@return string
 function M.generate_flag(feature, keyword)
