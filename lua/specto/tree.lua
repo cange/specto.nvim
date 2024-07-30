@@ -1,9 +1,9 @@
 local Util = require("specto.util")
 
----@param type SpectoType
----@param features SpectoFeature[]
+---@param type specto.ToggleType
+---@param features specto.ConfigFeature[]
 ---@param active_only? boolean|nil Expose only active keywords (xit, xdescribe, etc.)
----@return SpectoFeatureKeywords
+---@return specto.FeatureKeywords
 local function get_keywords(type, features, active_only)
   assert(features, "[specto] language features are not defined!")
   local feature = features[type]
@@ -16,16 +16,13 @@ local function get_keywords(type, features, active_only)
   return keywords
 end
 
----@class SpectoTree
----@field type SpectoType
----@field keywords string[]
 local Tree = {}
 
 Tree.__index = Tree
 
----@param type SpectoType
----@param ft_config SpectoFiletype
----@return SpectoTree
+---@param type specto.ToggleType
+---@param ft_config specto.ConfigFiletype
+---@return specto.Tree
 function Tree:new(type, ft_config)
   local keywords = get_keywords(type, ft_config.features)
   assert(keywords, "[specto] keywords are not defined!")
@@ -36,15 +33,11 @@ function Tree:new(type, ft_config)
   }, self)
 end
 
----@class SpectoColumnRange
----@field start_col number
----@field end_col number
-
 -- luacheck: push ignore 212
 
 ---@param node TSNode
 ---@param content string
----@param range? SpectoColumnRange
+---@param range? specto.ColumnRange
 function Tree:replace_text(node, content, range)
   local start_row, start_col, end_row, end_col = node:range()
   start_col = range and range.start_col or start_col
