@@ -19,7 +19,7 @@
 ---@field prefix boolean
 
 ---@alias specto.ConfigFeatureKeywords string[]
----@alias specto.ToggleType '"only"'|'"skip"'
+---@alias specto.ToggleType '"only"'|'"skip"'|'"todo"'
 
 ---@class specto.Tree
 ---@field type specto.ToggleType
