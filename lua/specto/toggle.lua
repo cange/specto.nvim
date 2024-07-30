@@ -158,10 +158,17 @@ M._toggle = Toggle:new()
 
 ---Toggle a test to run exclusively
 ---@description Toggles between it() and it.only()
+---@since 0.1.0
 function M.only() M._toggle:setup("only") end
 
 ---Toggle skipping a test
 ---@description Toggles between it() and it.skip()
+---@since 0.1.0
 function M.skip() M._toggle:setup("skip") end
+
+---Toggle a marking test as todo
+---@description Toggles between it() and it.todo()
+---@since 0.2.0
+function M.todo() M._toggle:setup("todo") end
 
 return M

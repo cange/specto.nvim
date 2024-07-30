@@ -18,15 +18,21 @@ local defaults = {
       filetypes = { "javascript", "typescript" },
       file_patterns = { "__tests__/", "%.?test%.", "%.?spec%." },
       features = {
+        only = {
+          flag = "only",
+          keywords = { "it", "describe", "test" },
+          prefix = false,
+          separator = ".",
+        },
         skip = {
           flag = "skip",
           keywords = { "it", "describe", "test" },
           prefix = false,
           separator = ".",
         },
-        only = {
-          flag = "only",
-          keywords = { "it", "describe", "test" },
+        todo = {
+          flag = "todo",
+          keywords = { "it", "describe", "test", "bench" },
           prefix = false,
           separator = ".",
         },
