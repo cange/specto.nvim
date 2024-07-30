@@ -140,7 +140,7 @@ Each language can be define an individual set for `only` and `skip` features.
 
 List of supported languages and their dedicated DSLs (eg. `it`, `describe`, `test`).
 
-| Language                  |  DSL  | Features   | Examples            |
-| ------------------------- | :---: | ---------- | ------------------- |
-| `javascript`/`typescript` | jest  | only, skip | `it.only`,`it.skip` |
-| `ruby`                    | rspec | skip       | `xit`               |
+| Language                  |     DSL     | Features         | Examples            |
+| ------------------------- | :---------: | ---------------- | ------------------- |
+| `javascript`/`typescript` | jest/vitest | only, skip, todo | `it.only`,`it.skip` |
+| `ruby`                    |    rspec    | skip             | `xit`               |
