@@ -2,72 +2,134 @@ local Util = require("specto.util")
 local Config = require("specto.config")
 local Tree = require("specto.tree")
 
+---@class specto.Toggle
+---@field private _toggle specto.Toggler
+local M = {}
+
+-- Keep filename cache local to module
+local function get_expanded_filename() return vim.fn.expand("%") end
+M._filename_cache = nil
+
+---Check if current filename matches any of the given patterns
 ---@param patterns string[]|nil
 ---@return boolean
 local function has_file_name_support(patterns)
   if patterns == nil then return false end
+  if not M._filename_cache then M._filename_cache = get_expanded_filename() end
+
   for _, p in ipairs(patterns) do
-    if vim.fn.expand("%"):match(p) then return true end
+    if M._filename_cache:match(p) then return true end
   end
   return false
 end
 
----@param type specto.ToggleType
----@return boolean
+---Checks if the given toggle type is supported for current file
+---@param type specto.ToggleType The type of toggle to check
+---@return boolean Whether the toggle type is supported
+---@error "Unsupported filetype" when filetype or feature not supported
 local function supported(type)
   local filetype = vim.bo.filetype
   local config = Config.filetype_config
-  local has_features = config ~= nil and config.features ~= nil
-  local msg = not has_features and string.format("%q is not supported!", filetype) or ""
 
-  if #msg == 0 and not has_file_name_support(config.file_patterns) then
-    msg = string.format("File name %q is not supported!", vim.fn.expand("%:t"))
+  -- Check if filetype has feature support
+  local has_feature_support = config ~= nil and config.features ~= nil
+  if not has_feature_support then
+    Util.notify(string.format("%q is not supported!", filetype))
+    return false
   end
-  if #msg == 0 and not config.features[type] then msg = string.format('"%s()" does not support %q!', type, filetype) end
 
-  local is_supported = #msg == 0
-  if not is_supported then Util.notify(msg) end
-  return is_supported
+  -- Check filename pattern support
+  if not has_file_name_support(config.file_patterns) then
+    Util.notify(string.format("File name %q is not supported!", vim.fn.expand("%:t")))
+    return false
+  end
+
+  -- Check specific feature support
+  if not config.features[type] then
+    Util.notify(string.format('"%s()" does not support %q!', type, filetype))
+    return false
+  end
+
+  return true
 end
 
 ---@class specto.Toggler
 local Toggle = {}
 Toggle.__index = Toggle
 
+---Creates a new Toggle instance
+---@return specto.Toggler
 function Toggle:new()
-  return setmetatable({
+  local instance = {
     feature = {},
     flag = "",
     name = "",
     node = nil,
     tree = nil,
-  }, self)
+  }
+  return setmetatable(instance, self)
 end
 
+---Handles prefix-based toggle functionality
+---@return nil
+---@error "Missing feature flag" when feature flag not configured
 function Toggle:handle_prefix()
-  local content = self.name:find("^" .. self.flag) == 1 and self.name:sub(2) or self.feature.flag .. self.name
+  if not self.feature.flag then
+    Util.notify("Missing feature flag configuration")
+    return
+  end
+
+  local has_prefix = self.name:find("^" .. self.flag) == 1
+  local content = has_prefix and self.name:sub(2) or self.feature.flag .. self.name
   self.tree:replace_text(self.node, content)
 end
 
-function Toggle:handle_suffix()
-  local range = {}
-  local next_text = self.tree:get_text(self.node:next_sibling())
-  local separator = self.feature.separator
+---Check if name has flag suffix
+---@param name string
+---@param flag string
+---@return boolean
+local function has_flag_suffix(name, flag) return name:match(flag .. "$") ~= nil end
+
+---Get the active state and content for suffix toggle
+---@param name string Current node name
+---@param flag string Toggle flag
+---@param next_text string Text of next sibling
+---@param separator string Separator configuration
+---@return boolean is_active
+---@return string content
+---@return number active_col_offset
+local function get_suffix_state(name, flag, next_text, separator)
+  local active = has_flag_suffix(name, flag)
+  local content = active and vim.split(name, flag)[1] or name .. flag
   local active_ecol = 0
-  local active = self.name:match(self.flag .. "$") ~= nil
-  local content = active and vim.split(self.name, self.flag)[1] or self.name .. self.flag
 
-  if not active and #separator and next_text == separator then
+  if not active and #separator > 0 and next_text == separator then
     active = true
-    content = self.name
-    active_ecol = #self.flag
+    content = name
+    active_ecol = #flag
   end
 
-  if active then
-    local _, scol, _, ecol = self.node:range()
-    range = { start_col = scol, end_col = ecol + active_ecol }
-  end
+  return active, content, active_ecol
+end
 
+---Calculate range for suffix replacement
+---@param node userdata TSNode
+---@param is_active boolean
+---@param col_offset number
+---@return table range
+local function calculate_suffix_range(node, is_active, col_offset)
+  if not is_active then return {} end
+
+  local _, scol, _, ecol = node:range()
+  return { start_col = scol, end_col = ecol + col_offset }
+end
+
+---Handles suffix-based toggle functionality
+---@return nil
+function Toggle:handle_suffix()
+  local next_text = self.tree:get_text(self.node:next_sibling())
+  local active, content, active_ecol = get_suffix_state(self.name, self.flag, next_text, self.feature.separator)
+  local range = calculate_suffix_range(self.node, active, active_ecol)
   self.tree:replace_text(self.node, content, range)
 end
 
@@ -91,14 +153,15 @@ function Toggle:setup(type)
   end
 end
 
----@class specto.Toggle
-local M = {}
-local toggle = Toggle:new()
+-- Make toggle instance a private member of M
+M._toggle = Toggle:new()
 
----@example it() => it.only() => it()
-function M.only() toggle:setup("only") end
+---Toggle a test to run exclusively
+---@description Toggles between it() and it.only()
+function M.only() M._toggle:setup("only") end
 
----@example it.skip() => it() => it.skip()
-function M.skip() toggle:setup("skip") end
+---Toggle skipping a test
+---@description Toggles between it() and it.skip()
+function M.skip() M._toggle:setup("skip") end
 
 return M
