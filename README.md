@@ -70,6 +70,7 @@ a test block or used via keybinding.
 ```lua
 vim.keymap.set("n", "<leader>to", "<cmd>Specto toggle only<CR>", { desc = "Toggle test only" })
 vim.keymap.set("n", "<leader>ts", "<cmd>Specto toggle skip<CR>", { desc = "Toggle test skip" })
+vim.keymap.set("n", "<leader>tt", "<cmd>Specto toggle todo<CR>", { desc = "Toggle test todo" })
 ```
 
 ### Scope
@@ -138,10 +139,10 @@ javascript = { -- example: "ruby", etc.
 
 ### Supported Languages
 
-List of supported languages and their dedicated framework DSLs (eg. `it`,
-`describe`, `test`).
+List of supported languages and their dedicated framework DSLs (e.g. `it`,
+`describe`, `test`, etc).
 
-| Language                  |     DSL     | skip | only |
-| ------------------------- | :---------: | :--: | :--: |
-| `javascript`/`typescript` | jest/vitest |  ✓   |  ✓   |
-| `ruby`                    |    rspec    |  ✓   |  ⛌   |
+| Language                  |     DSL     | skip | only | todo |
+| ------------------------- | :---------: | :--: | :--: | :--: |
+| `javascript`/`typescript` | jest/vitest |  ✓   |  ✓   |  ✓   |
+| `ruby`                    |    rspec    |  ✓   |  ⛌   |  ⛌   |
