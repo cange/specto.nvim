@@ -34,10 +34,10 @@ Install the plugin with your preferred package manager:
 
 ## Usage
 
-Allows to toggle certain tests blocks with a `only` or `skip` flag
+Allows toggling certain tests blocks with a `only` or `skip` flag
 (see [Supported Language](#supported-languages)).
 
-Calling one of the following within a spec block such as `it(…)`
+Calling one of the following within a spec block such as `it(…)`.
 
 ### skip()
 
@@ -68,8 +68,8 @@ The provided commands can either be called directly via `:Specto toggle *` withi
 a test block or used via keybinding.
 
 ```lua
-vim.keymap.set("n", "<leader>to", "<cmd>Specto toggle only<CR>" )
-vim.keymap.set("n", "<leader>ts", "<cmd>Specto toggle skip<CR>" )
+vim.keymap.set("n", "<leader>to", "<cmd>Specto toggle only<CR>", { desc = "Toggle test only" })
+vim.keymap.set("n", "<leader>ts", "<cmd>Specto toggle skip<CR>", { desc = "Toggle test skip" })
 ```
 
 ### Scope
@@ -81,8 +81,8 @@ located.
 describe('context', () => {
   // ↓ toggle applies here
   it.skip('something', () => {
-    expect(█)
-    //     ↳  cursor here
+    expect(|)
+    //     ^ cursor here
   })
 })
 ```
@@ -95,7 +95,6 @@ Specto comes with the following defaults:
 require("specto").setup({ -- BEGIN_DEFAULT_OPTS
   exclude = {
     filetypes = { -- exclude certain files by default
-      "",
       "help",
     }
   },
@@ -115,10 +114,10 @@ See [config.lua](./lua/specto/config.lua) for more details.
 
 ### Language Settings
 
-Each language can be define an individual set for `only` and `skip` features.
+Each language can define an individual set for `only` and `skip` features.
 
 ```lua
-<LANUGAGE_NAME> = { -- eg. javascript
+javascript = { -- example: "ruby", etc.
   filetypes = { "javascript", "typescript" }, -- a subset of supported language
 
   -- Files or directories where tests can be found.
@@ -131,16 +130,18 @@ Each language can be define an individual set for `only` and `skip` features.
       flag = "only", -- identfier name
       keywords = { "it", "describe", "test" }, -- defines on which blocks it can be attached to
       prefix = false, -- position of flag, false adds flag at the end of a keyword
-      separator = ".", -- defines if an flag came with a certain mark eg. `describe.only`
+      separator = ".", -- defines if a flag came with a certain mark eg. `describe.only`
+    },
   },
 }
 ```
 
 ### Supported Languages
 
-List of supported languages and their dedicated DSLs (eg. `it`, `describe`, `test`).
+List of supported languages and their dedicated framework DSLs (eg. `it`,
+`describe`, `test`).
 
-| Language                  |  DSL  | Features   | Examples            |
-| ------------------------- | :---: | ---------- | ------------------- |
-| `javascript`/`typescript` | jest  | only, skip | `it.only`,`it.skip` |
-| `ruby`                    | rspec | skip       | `xit`               |
+| Language                  |     DSL     | skip | only |
+| ------------------------- | :---------: | :--: | :--: |
+| `javascript`/`typescript` | jest/vitest |  ✓   |  ✓   |
+| `ruby`                    |    rspec    |  ✓   |  ⛌   |
