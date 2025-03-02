@@ -15,11 +15,13 @@ M._filename_cache = nil
 ---@param patterns string[]|nil
 ---@return boolean
 local function has_file_name_support(patterns)
-  if patterns == nil then return false end
-  if not M._filename_cache then M._filename_cache = get_expanded_filename() end
+  if not patterns then return false end
+
+  local filename = M._filename_cache or get_expanded_filename()
+  M._filename_cache = filename
 
   for _, p in ipairs(patterns) do
-    if M._filename_cache:match(p) then return true end
+    if filename:match(p) then return true end
   end
   return false
 end
@@ -90,21 +92,19 @@ end
 ---@param flag string Toggle flag
 ---@param next_text string Text of next sibling
 ---@param separator string Separator configuration
----@return boolean is_active
----@return string content
----@return number active_col_offset
+---@return boolean, string, number # is_active, content, col_offset
 local function get_suffix_state(name, flag, next_text, separator)
-  local active = has_flag_suffix(name, flag)
-  local content = active and vim.split(name, flag)[1] or name .. flag
-  local active_ecol = 0
+  local flag_len = #flag
+  local active = name:sub(-flag_len) == flag
 
-  if not active and #separator > 0 and next_text == separator then
-    active = true
-    content = name
-    active_ecol = #flag
-  end
+  -- Check active case
+  if active then return true, name:sub(1, -flag_len - 1), 0 end
 
-  return active, content, active_ecol
+  -- Check separator case
+  if #separator > 0 and next_text == separator then return true, name, flag_len end
+
+  -- inactive case
+  return false, name .. flag, 0
 end
 
 ---Calculate range for suffix replacement
