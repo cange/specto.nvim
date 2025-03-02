@@ -16,6 +16,7 @@ local function get_keywords(type, features, active_only)
   return keywords
 end
 
+---@class specto.Tree
 local Tree = {}
 
 Tree.__index = Tree
@@ -33,8 +34,7 @@ function Tree:new(type, ft_config)
   }, self)
 end
 
--- luacheck: push ignore 212
-
+---Replaces node text
 ---@param node TSNode
 ---@param content string
 ---@param range? specto.ColumnRange
@@ -45,6 +45,7 @@ function Tree:replace_text(node, content, range)
   vim.api.nvim_buf_set_text(0, start_row, start_col, end_row, end_col, { content })
 end
 
+---Gets text content of a node
 ---@param node TSNode|nil
 ---@return string
 function Tree:get_text(node)
@@ -77,6 +78,7 @@ function Tree:next(node)
   return target
 end
 
+---Gets the current tree node
 ---@return TSNode|nil
 function Tree:get_node()
   self._notified = false

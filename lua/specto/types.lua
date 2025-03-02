@@ -18,12 +18,16 @@
 ---@field separator string
 ---@field prefix boolean
 
+---@alias specto.FeatureKeywords string[]
 ---@alias specto.ConfigFeatureKeywords string[]
 ---@alias specto.ToggleType '"only"'|'"skip"'|'"todo"'
 
 ---@class specto.Tree
 ---@field type specto.ToggleType
 ---@field keywords string[]
+---@field get_node fun(self: specto.Tree): TSNode|nil
+---@field get_text fun(self: specto.Tree, node: TSNode): string
+---@field replace_text fun(self: specto.Tree, node: TSNode, content: string, range?: specto.ColumnRange)
 
 ---@class specto.ColumnRange
 ---@field start_col number
