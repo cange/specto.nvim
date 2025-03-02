@@ -18,60 +18,22 @@ or "skipped".
   </figure>
 </div>
 
-## Installation
+## Features
 
-Install the plugin with your preferred package manager:
+- Toggle test modifiers in JavaScript/TypeScript test files
 
-### [lazy.nvim](https://github.com/folke/lazy.nvim)
+  - `it()` ⟷ `it.only()`
+  - `it()` ⟷ `it.skip()`
+  - `it()` ⟷ `it.todo()`
+  - Works with `describe()` and `test()` blocks too
 
-```lua
-{
-  "cange/specto.nvim",
-  dependencies = "nvim-treesitter/nvim-treesitter",
-  opts = {}
-}
-```
+- Support for Ruby RSpec files
 
-## Usage
+  - Toggle skip prefix: `it()` ⟷ `xit()`
+  - Works with `context`, `describe`, `example`, `scenario`, `specify`, and `test` blocks
 
-Allows toggling certain tests blocks with a `only` or `skip` flag
-(see [Supported Language](#supported-languages)).
-
-Calling one of the following within a spec block such as `it(…)`.
-
-### skip()
-
-```lua
-:lua require('specto.toggle').skip()
--- or
-:Specto toggle skip
-```
-
-Toggles `it(…)` -> `it.skip(…)` in JavaScript
-
-### only()
-
-```lua
-:lua require('specto.toggle').only()
--- or
-:Specto toggle only
-```
-
-Toggles `it(…)` -> `it.only(…)` in JavaScript
-
-> [!NOTE]
-> The feature set depends on the respective language and its testing framework.
-
-### Keybindings
-
-The provided commands can either be called directly via `:Specto toggle *` within
-a test block or used via keybinding.
-
-```lua
-vim.keymap.set("n", "<leader>to", "<cmd>Specto toggle only<CR>", { desc = "Toggle test only" })
-vim.keymap.set("n", "<leader>ts", "<cmd>Specto toggle skip<CR>", { desc = "Toggle test skip" })
-vim.keymap.set("n", "<leader>tt", "<cmd>Specto toggle todo<CR>", { desc = "Toggle test todo" })
-```
+- Smart detection of common test files (e.g. `*.spec.js`, `*_spec.rb`, etc.)
+- Dot-repeat previous actions
 
 ### Scope
 
@@ -86,6 +48,51 @@ describe('context', () => {
     //     ^ cursor here
   })
 })
+```
+
+## Getting Started
+
+### Requirements
+
+- Neovim >= 0.9.0
+- [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
+
+### Installation
+
+Install the plugin with your preferred package manager:
+
+<details><summary>lazy.nvim</summary>
+
+```lua
+{
+  "cange/specto.nvim",
+  dependencies = "nvim-treesitter/nvim-treesitter",
+  opts = {}
+}
+```
+
+</details>
+
+### Commands
+
+```lua
+:Specto toggle skip
+:Specto toggle only
+:Specto toggle todo
+```
+
+> [!NOTE]
+> The feature set depends on the respective language and its testing framework.
+
+### Keybindings
+
+The provided commands can either be called directly via `:Specto toggle *` within
+a test block or used via keybinding.
+
+```lua
+vim.keymap.set("n", "<leader>to", "<cmd>Specto toggle only<CR>", { desc = "Toggle test only" })
+vim.keymap.set("n", "<leader>ts", "<cmd>Specto toggle skip<CR>", { desc = "Toggle test skip" })
+vim.keymap.set("n", "<leader>tt", "<cmd>Specto toggle todo<CR>", { desc = "Toggle test todo" })
 ```
 
 ## Configuration
@@ -127,7 +134,7 @@ javascript = { -- example: "ruby", etc.
 
   features = {
     -- subset of criteria of each feature
-    only { -- or skip
+    only = { -- or skip, todo
       flag = "only", -- identfier name
       keywords = { "it", "describe", "test" }, -- defines on which blocks it can be attached to
       prefix = false, -- position of flag, false adds flag at the end of a keyword
@@ -136,13 +143,3 @@ javascript = { -- example: "ruby", etc.
   },
 }
 ```
-
-### Supported Languages
-
-List of supported languages and their dedicated framework DSLs (e.g. `it`,
-`describe`, `test`, etc).
-
-| Language                  |     DSL     | skip | only | todo |
-| ------------------------- | :---------: | :--: | :--: | :--: |
-| `javascript`/`typescript` | jest/vitest |  ✓   |  ✓   |  ✓   |
-| `ruby`                    |    rspec    |  ✓   |  ⛌   |  ⛌   |
