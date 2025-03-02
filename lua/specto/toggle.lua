@@ -4,6 +4,7 @@ local Tree = require("specto.tree")
 
 ---@class specto.Toggle
 ---@field private _toggle specto.Toggler
+---@field private _last_toggle_type specto.ToggleType|nil
 local M = {}
 
 -- Keep filename cache local to module
@@ -84,12 +85,6 @@ function Toggle:handle_prefix()
   self.tree:replace_text(self.node, content)
 end
 
----Check if name has flag suffix
----@param name string
----@param flag string
----@return boolean
-local function has_flag_suffix(name, flag) return name:match(flag .. "$") ~= nil end
-
 ---Get the active state and content for suffix toggle
 ---@param name string Current node name
 ---@param flag string Toggle flag
@@ -133,8 +128,9 @@ function Toggle:handle_suffix()
   self.tree:replace_text(self.node, content, range)
 end
 
+---Executes the toggle action
 ---@param type specto.ToggleType
-function Toggle:setup(type)
+function Toggle:trigger(type)
   if not supported(type) then return end
 
   local ft_config = Config.filetype_config
@@ -153,22 +149,35 @@ function Toggle:setup(type)
   end
 end
 
--- Make toggle instance a private member of M
 M._toggle = Toggle:new()
+M._last_toggle_type = nil
+
+---Make the last toggle repeatable
+---@param type specto.ToggleType
+local function dot_repeat(type)
+  M._last_toggle_type = type
+  vim.go.operatorfunc = "v:lua.require'specto.toggle'.repeat_toggle"
+  vim.api.nvim_feedkeys("g@l", "n", false)
+end
+
+---@private
+function M.repeat_toggle()
+  if M._last_toggle_type then M._toggle:trigger(M._last_toggle_type) end
+end
 
 ---Toggle a test to run exclusively
 ---@description Toggles between it() and it.only()
 ---@since 0.1.0
-function M.only() M._toggle:setup("only") end
+function M.only() dot_repeat("only") end
 
 ---Toggle skipping a test
 ---@description Toggles between it() and it.skip()
 ---@since 0.1.0
-function M.skip() M._toggle:setup("skip") end
+function M.skip() dot_repeat("skip") end
 
----Toggle a marking test as todo
+---Toggle marking test as todo
 ---@description Toggles between it() and it.todo()
 ---@since 0.2.0
-function M.todo() M._toggle:setup("todo") end
+function M.todo() dot_repeat("todo") end
 
 return M
