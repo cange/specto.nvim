@@ -143,3 +143,8 @@ javascript = { -- example: "ruby", etc.
   },
 }
 ```
+
+## Contributing
+
+All contributions are welcome! Just open a pull request. Please read
+[CONTRIBUTING.md](./CONTRIBUTING.md).
