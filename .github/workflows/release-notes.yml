@@ -4,6 +4,14 @@ name: Process Release Notes
 on:
   release:
     types: [created]
+  workflow_dispatch:
+    inputs:
+      test_mode:
+        description: "Run in test mode"
+        required: false
+        default: "true"
+  pull_request:
+    branches: [main]
 
 permissions:
   contents: write
@@ -16,14 +24,22 @@ jobs:
 
       - name: Process Release Notes
         uses: actions/github-script@v6
+        if: github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && github.event.inputs.test_mode == 'true')
         with:
           script: |
             const release = context.payload.release;
-            const body = release.body.replace(/^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([^)]+\))?:\s*/gm, '');
+            // For testing via workflow_dispatch
+            const testBody = "feat: test feature\nfix: test bug fix\ndocs: test docs";
+            const bodyToProcess = release?.body || testBody;
+            const body = bodyToProcess.replace(/^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([^)]+\))?:\s*/gm, '');
 
-            await github.rest.repos.updateRelease({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              release_id: release.id,
-              body: body
-            });
+            if (github.event_name === 'workflow_dispatch') {
+              console.log('Test mode - would update release with:', body);
+            } else {
+              await github.rest.repos.updateRelease({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                release_id: release.id,
+                body: body
+              });
+            }
