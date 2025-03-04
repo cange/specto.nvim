@@ -36,14 +36,14 @@ jobs:
                 ''
               );
               console.log('Test mode - processed release notes would look like:\n', processedBody);
-            } else {
+            } else if (github.event_name === 'release' && context.payload.release) {
               // Real release mode
               const release = context.payload.release;
               const body = release.body.replace(
                 /^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([^)]+\))?:\s*/gm,
                 ''
               );
-              
+
               await github.rest.repos.updateRelease({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
