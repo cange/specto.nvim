@@ -8,8 +8,9 @@ on:
     inputs:
       test_mode:
         description: "Run in test mode"
+        type: boolean
         required: false
-        default: "true"
+        default: true
   pull_request:
     branches: [main]
 
