@@ -5,6 +5,9 @@ on:
   release:
     types: [created]
 
+permissions:
+  contents: write
+
 jobs:
   process-release-notes:
     runs-on: ubuntu-latest
