@@ -20,7 +20,7 @@ local options = {
   complete = function(_, cmd_line)
     local store = {
       [""] = { "toggle" },
-      toggle = { "only", "skip" },
+      toggle = { "only", "skip", "todo" },
     }
     local has_space = string.match(cmd_line, "%s$")
     local params = vim.split(cmd_line, "%s+", { trimempty = true })
