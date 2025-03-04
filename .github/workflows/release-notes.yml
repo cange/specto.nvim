@@ -1,0 +1,26 @@
+---
+name: Process Release Notes
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  process-release-notes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Process Release Notes
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const release = context.payload.release;
+            const body = release.body.replace(/^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([^)]+\))?:\s*/gm, '');
+
+            await github.rest.repos.updateRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: release.id,
+              body: body
+            });
