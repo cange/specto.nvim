@@ -4,7 +4,7 @@ local Tree = require("specto.tree")
 
 ---@class specto.Toggle
 ---@field private _toggle specto.Toggler
----@field private _last_toggle_type specto.ToggleType|nil
+---@field private _last_toggle_type specto.ToggleType | nil
 local M = {}
 
 -- Keep filename cache local to module
@@ -12,7 +12,7 @@ local function get_expanded_filename() return vim.fn.expand("%") end
 M._filename_cache = nil
 
 ---Check if current filename matches any of the given patterns
----@param patterns string[]|nil
+---@param patterns string[] | nil
 ---@return boolean
 local function has_file_name_support(patterns)
   if not patterns then return false end

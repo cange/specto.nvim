@@ -57,7 +57,7 @@ local augroup_id
 
 ---Provides the configuration for a given filetype.
 ---@param filetype string
----@return specto.ConfigFiletype|nil
+---@return specto.Language | nil
 function M.get_config(filetype)
   for lang, config in pairs(options.languages) do
     if lang == filetype or vim.tbl_contains(config.filetypes or {}, filetype) then return config end
@@ -91,7 +91,7 @@ function M.auto_detection()
   })
 end
 
----@return specto.ConfigFiletype|nil
+---@return specto.Language | nil
 M.filetype_config = nil
 
 ---Sets up the configuration for Specto.

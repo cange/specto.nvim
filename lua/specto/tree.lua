@@ -1,8 +1,8 @@
 local Util = require("specto.util")
 
 ---@param type specto.ToggleType
----@param features specto.ConfigFeature[]
----@param active_only? boolean|nil Expose only active keywords (xit, xdescribe, etc.)
+---@param features specto.Feature[]
+---@param active_only? boolean | nil Expose only active keywords (xit, xdescribe, etc.)
 ---@return specto.FeatureKeywords
 local function get_keywords(type, features, active_only)
   assert(features, "[specto] language features are not defined!")
@@ -22,7 +22,7 @@ local Tree = {}
 Tree.__index = Tree
 
 ---@param type specto.ToggleType
----@param ft_config specto.ConfigFiletype
+---@param ft_config specto.Language
 ---@return specto.Tree
 function Tree:new(type, ft_config)
   local keywords = get_keywords(type, ft_config.features)
@@ -46,22 +46,22 @@ function Tree:replace_text(node, content, range)
 end
 
 ---Gets text content of a node
----@param node TSNode|nil
+---@param node TSNode | nil
 ---@return string
 function Tree:get_text(node)
   if node == nil then return "" end
   return vim.treesitter.get_node_text(node, 0)
 end
 
----@param node TSNode|nil
+---@param node TSNode | nil
 ---@return boolean
 function Tree:matches(node)
   if not node or not self.keywords then return false end
   return vim.tbl_contains(self.keywords, self:get_text(node))
 end
 
----@param node TSNode|nil
----@return TSNode|nil
+---@param node TSNode | nil
+---@return TSNode | nil
 function Tree:next(node)
   if not node then
     return nil
@@ -79,7 +79,7 @@ function Tree:next(node)
 end
 
 ---Gets the current tree node
----@return TSNode|nil
+---@return TSNode | nil
 function Tree:get_node()
   self._notified = false
   return self:next(vim.treesitter.get_node())
