@@ -1,31 +1,34 @@
 ---@meta
 
----@class specto.ConfigFiletype
----@field file_patterns string[] expects a table of *string-match* patterns.
----@field features table<specto.ConfigFeature>
+---@alias specto.FeatureKeywords string[]
+---@alias specto.Features table<string, specto.Feature>
+
+---@class specto.Feature
+---@field keywords specto.FeatureKeywords Defines on which blocks it can be attached to
+---@field flag string Defines the actual flag name to be toggled
+---@field separator string Defines the separator between keyword and flag
+---@field prefix boolean Defines position of flag, false adds flag at the end of a keyword
+
+---@class specto.Language
+---@field file_patterns string[]
+---@field features specto.Features
 ---@field filetypes? string[]
 
----@class specto.ConfigExclude
+---@alias specto.Languages table<string, specto.Language>
+
+---@class specto.Exclude
 ---@field filetypes string[]
 
 ---@class specto.Config
----@field exclude specto.ConfigExclude
----@field languages table<string, specto.ConfigFiletype>
+---@field exclude specto.Exclude
+---@field languages specto.Languages
 
----@class specto.ConfigFeature
----@field keywords specto.ConfigFeatureKeywords
----@field flag string
----@field separator string
----@field prefix boolean
-
----@alias specto.FeatureKeywords string[]
----@alias specto.ConfigFeatureKeywords string[]
----@alias specto.ToggleType '"only"'|'"skip"'|'"todo"'
+---@alias specto.ToggleType '"only"' | '"skip"' | '"todo"'
 
 ---@class specto.Tree
 ---@field type specto.ToggleType
 ---@field keywords string[]
----@field get_node fun(self: specto.Tree): TSNode|nil
+---@field get_node fun(self: specto.Tree): TSNode | nil
 ---@field get_text fun(self: specto.Tree, node: TSNode): string
 ---@field replace_text fun(self: specto.Tree, node: TSNode, content: string, range?: specto.ColumnRange)
 
