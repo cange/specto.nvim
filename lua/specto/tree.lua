@@ -32,6 +32,7 @@ function Tree:new(type, ft_config)
   return setmetatable({
     type = type,
     keywords = keywords,
+    feature = ft_config.features[type],
     _logged = false,
   }, self)
 end
@@ -63,9 +64,26 @@ function Tree:matches(node)
   return vim.tbl_contains(self.keywords, self:get_text(node))
 end
 
+---Checks if the node represents an active feature flag
+---@param node TSNode
+---@return boolean
+function Tree:is_active_flag(node)
+  local text = self:get_text(node)
+  if not text or not self.feature then return false end
+
+  if self.feature.prefix then
+    -- For prefix style (xit), check if it starts with the flag
+    return text:match("^" .. self.feature.flag) ~= nil
+  else
+    -- For suffix style (it.only), check if it ends with separator+flag
+    return text:match(self.feature.separator .. self.feature.flag .. "$") ~= nil
+  end
+end
+
 ---@param node TSNode | nil
+---@param suppress_warning? boolean
 ---@return TSNode | nil
-function Tree:next(node)
+function Tree:next(node, suppress_warning)
   if not node then
     return nil
   elseif self:matches(node) then
@@ -73,7 +91,10 @@ function Tree:next(node)
   elseif node:child_count() > 0 and self:matches(node:child(0)) then
     return node:child(0)
   end
+
   local target = self:next(node:parent())
+  self._notified = suppress_warning and true or self._notified
+
   if not target and not self._notified then
     Util.info(string.format("%q no target found!", self.type))
     self._notified = true
