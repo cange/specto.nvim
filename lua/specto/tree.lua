@@ -53,8 +53,9 @@ function Tree:get_text(node)
   return vim.treesitter.get_node_text(node, 0)
 end
 
----@param node TSNode | nil
----@return boolean
+---Checks if the given node's text content matches any of the keywords
+---@param node TSNode | nil The tree-sitter node to check
+---@return boolean true if the node's text matches any keyword, false otherwise
 function Tree:matches(node)
   if not node or not self.keywords then return false end
   return vim.tbl_contains(self.keywords, self:get_text(node))

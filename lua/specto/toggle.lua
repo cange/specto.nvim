@@ -4,7 +4,7 @@ local Tree = require("specto.tree")
 
 ---@class specto.Toggle
 ---@field private _toggle specto.Toggler
----@field private _last_toggle_type specto.ToggleType | nil
+---@field private _last_type specto.ToggleType | specto.JumpType | nil
 local M = {}
 
 -- Keep filename cache local to module
@@ -122,7 +122,8 @@ end
 ---Handles suffix-based toggle functionality
 ---@return nil
 function Toggle:handle_suffix()
-  local next_text = self.tree:get_text(self.node:next_sibling())
+  local next_sibling = self.node:next_sibling()
+  local next_text = next_sibling and self.tree:get_text(next_sibling) or ""
   local active, content, active_ecol = get_suffix_state(self.name, self.flag, next_text, self.feature.separator)
   local range = calculate_suffix_range(self.node, active, active_ecol)
   self.tree:replace_text(self.node, content, range)
@@ -150,34 +151,25 @@ function Toggle:trigger(type)
 end
 
 M._toggle = Toggle:new()
-M._last_toggle_type = nil
+M._last_type = nil
 
----Make the last toggle repeatable
 ---@param type specto.ToggleType
-local function dot_repeat(type)
-  M._last_toggle_type = type
-  vim.go.operatorfunc = "v:lua.require'specto.toggle'.repeat_toggle"
-  vim.api.nvim_feedkeys("g@l", "n", false)
-end
-
----@private
-function M.repeat_toggle()
-  if M._last_toggle_type then M._toggle:trigger(M._last_toggle_type) end
-end
+---@since 0.4.0
+function M.toggle(type) M._toggle:trigger(type) end
 
 ---Toggle a test to run exclusively
 ---@description Toggles between it() and it.only()
 ---@since 0.1.0
-function M.only() dot_repeat("only") end
+function M.only() require("specto.repeat").dot_repeat("only") end
 
 ---Toggle skipping a test
 ---@description Toggles between it() and it.skip()
 ---@since 0.1.0
-function M.skip() dot_repeat("skip") end
+function M.skip() require("specto.repeat").dot_repeat("skip") end
 
 ---Toggle marking test as todo
 ---@description Toggles between it() and it.todo()
 ---@since 0.2.0
-function M.todo() dot_repeat("todo") end
+function M.todo() require("specto.repeat").dot_repeat("todo") end
 
 return M
