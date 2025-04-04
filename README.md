@@ -33,6 +33,11 @@ toggles. It provides framework-specific controls to mark tests as "only",
   - Works with `context`, `describe`, `example`, `scenario`, `specify`, and
     `test` blocks
 
+- Navigation between active feature flags
+
+  - Jump to next/previous active flag (e.g. `it.only`, `describe.skip`)
+  - Circular navigation (wraps around buffer)
+
 - Smart detection of common test files (e.g. `*.spec.js`, `*_spec.rb`, etc.)
 - Dot-repeat previous actions
 
@@ -75,7 +80,7 @@ Install the plugin with your preferred package manager:
 }
 ```
 
-### Configuration
+## Configuration
 
 Specto comes with the following defaults:
 
@@ -128,6 +133,8 @@ javascript = { -- example: "ruby", etc.
 :Specto toggle skip
 :Specto toggle only
 :Specto toggle todo
+:Specto jump next
+:Specto jump prev
 ```
 
 > [!NOTE]
@@ -139,9 +146,14 @@ The provided commands can either be called directly via `:Specto toggle *` withi
 a test block or used via keybinding.
 
 ```lua
+-- Toggle bindings
 vim.keymap.set("n", "<leader>to", "<cmd>Specto toggle only<CR>", { desc = "Toggle test only" })
 vim.keymap.set("n", "<leader>ts", "<cmd>Specto toggle skip<CR>", { desc = "Toggle test skip" })
 vim.keymap.set("n", "<leader>tt", "<cmd>Specto toggle todo<CR>", { desc = "Toggle test todo" })
+
+-- Navigation bindings
+vim.keymap.set("n", "]t", "<cmd>Specto jump next<CR>", { desc = "Go to next toggle" })
+vim.keymap.set("n", "[t", "<cmd>Specto jump prev<CR>", { desc = "Go to previous toggle" })
 ```
 
 ## Contributing

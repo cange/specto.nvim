@@ -13,7 +13,9 @@ local function command(opts)
   local ok, context = pcall(require, "specto." .. context_name)
   if not action_name then
     if context_name == "toggle" then action_name = "only" end
+    if context_name == "jump" then action_name = "next" end
   end
+
   if ok then context[action_name]() end
 end
 
@@ -21,7 +23,8 @@ local options = {
   nargs = "?",
   complete = function(_, cmd_line)
     local store = {
-      [""] = { "toggle" },
+      [""] = { "toggle", "jump" },
+      jump = { "next", "prev" },
       toggle = { "only", "skip", "todo" },
     }
     local has_space = string.match(cmd_line, "%s$")

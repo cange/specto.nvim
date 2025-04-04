@@ -18,7 +18,7 @@ end
 function M.jump()
   if M._last_type then
     Util.debug(string.format("repeat:jump %q", M._last_type))
-    require("specto.jump")[M._last_type]()
+    require("specto.jump").jump(M._last_type --[[@as specto.JumpType]])
   end
 end
 
