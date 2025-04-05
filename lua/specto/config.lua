@@ -1,3 +1,6 @@
+-- Represents the basic configuration for the individual languages and it
+-- feature set.
+
 local M = {}
 
 ---@type specto.Config

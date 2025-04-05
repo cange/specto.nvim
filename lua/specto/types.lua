@@ -1,3 +1,5 @@
+-- Contains shared type declaration.
+
 ---@meta
 
 ---@alias specto.FeatureKeywords string[]

@@ -1,3 +1,5 @@
+-- Provides basic helper functionallity.
+
 local M = {}
 M._debug = false
 

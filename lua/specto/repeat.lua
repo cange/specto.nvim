@@ -1,3 +1,6 @@
+-- Provide the repeat logic which can be triggered by Neovim's dot `.` repeat
+-- functionallity.
+
 local Util = require("specto.util")
 ---@class specto.Repeat
 ---@field private _last_type specto.ToggleType | specto.JumpType | nil
