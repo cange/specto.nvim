@@ -1,3 +1,5 @@
+-- Provide the Neovim command API to all the available feature calls.
+
 local M = {}
 
 ---@param opts {args: string}

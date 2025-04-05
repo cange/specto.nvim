@@ -1,3 +1,5 @@
+-- Provides the logic about toggle the languages specific features keys.
+
 local Util = require("specto.util")
 local Config = require("specto.config")
 local Tree = require("specto.tree")

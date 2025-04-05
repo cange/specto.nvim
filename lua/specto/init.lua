@@ -1,3 +1,5 @@
+-- Main entry to access the plugins functionallity
+
 if not rawget(vim, "treesitter") then
   error('[specto] "treesitter" is not defined!')
   return

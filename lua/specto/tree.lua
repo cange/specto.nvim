@@ -1,3 +1,5 @@
+-- Provides support helper to travel through the treesitter nodes.
+
 local Util = require("specto.util")
 
 ---@param type specto.ToggleType
