@@ -72,7 +72,7 @@ function Tree:next(node)
   end
   local target = self:next(node:parent())
   if not target and not self._notified then
-    Util.notify(string.format("%q no target found!", self.type))
+    Util.info(string.format("%q no target found!", self.type))
     self._notified = true
   end
   return target
