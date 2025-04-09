@@ -37,19 +37,19 @@ local function supported(type)
   -- Check if filetype has feature support
   local has_feature_support = config ~= nil and config.features ~= nil
   if not has_feature_support then
-    Util.notify(string.format("%q is not supported!", filetype))
+    Util.info(string.format("%q is not supported!", filetype))
     return false
   end
 
   -- Check filename pattern support
   if not has_file_name_support(config.file_patterns) then
-    Util.notify(string.format("File name %q is not supported!", vim.fn.expand("%:t")))
+    Util.info(string.format("File name %q is not supported!", vim.fn.expand("%:t")))
     return false
   end
 
   -- Check specific feature support
   if not config.features[type] then
-    Util.notify(string.format('"%s()" does not support %q!', type, filetype))
+    Util.info(string.format('"%s()" does not support %q!', type, filetype))
     return false
   end
 
@@ -78,7 +78,7 @@ end
 ---@error "Missing feature flag" when feature flag not configured
 function Toggle:handle_prefix()
   if not self.feature.flag then
-    Util.notify("Missing feature flag configuration")
+    Util.warn("Missing feature flag configuration")
     return
   end
 
