@@ -4,7 +4,7 @@
 local Util = require("specto.util")
 ---@class specto.Repeat
 ---@field private _last_type specto.ToggleType | specto.JumpType | nil
-M = {}
+local M = {}
 M._last_type = nil
 
 ---@private
