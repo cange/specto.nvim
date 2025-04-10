@@ -1,4 +1,4 @@
-*specto.nvim.txt*        For Neovim >= 0.9.0        Last change: 2025 March 02
+*specto.nvim.txt*        For Neovim >= 0.9.0        Last change: 2025 April 10
 
 ==============================================================================
 Table of Contents                              *specto.nvim-table-of-contents*
@@ -6,6 +6,7 @@ Table of Contents                              *specto.nvim-table-of-contents*
   - Features                                            |specto.nvim-features|
   - Getting Started                              |specto.nvim-getting-started|
   - Configuration                                  |specto.nvim-configuration|
+  - Contributing                                    |specto.nvim-contributing|
 
 
 FEATURES                                                *specto.nvim-features*
@@ -17,7 +18,11 @@ FEATURES                                                *specto.nvim-features*
     - Works with `describe()` and `test()` blocks too
 - Support for Ruby RSpec files
     - Toggle skip prefix: `it()` ⟷ `xit()`
-    - Works with `context`, `describe`, `example`, `scenario`, `specify`, and `test` blocks
+    - Works with `context`, `describe`, `example`, `scenario`, `specify`, and
+        `test` blocks
+- Navigation between active feature flags
+    - Jump to next/previous active flag (e.g. `it.only`, `describe.skip`)
+    - Circular navigation (wraps around buffer)
 - Smart detection of common test files (e.g.� `*.spec.js`, `*_spec.rb`, etc.)
 - Dot-repeat previous actions
 
@@ -51,38 +56,17 @@ INSTALLATION ~
 
 Install the plugin with your preferred package manager:
 
-lazy.nvim ~
-
 >lua
+    -- lazy.nvim
     {
       "cange/specto.nvim",
       dependencies = "nvim-treesitter/nvim-treesitter",
-      opts = {}
+      ---@type specto.Config
+      opts = {
+        -- your configuration comes here or leave it empty to use the default settings
+        -- refer to the configuration section below
+      }
     }
-<
-
-
-COMMANDS ~
-
->lua
-    :Specto toggle skip
-    :Specto toggle only
-    :Specto toggle todo
-<
-
-
-  [!NOTE] The feature set depends on the respective language and its testing
-  framework.
-
-KEYBINDINGS ~
-
-The provided commands can either be called directly via `:Specto toggle *`
-within a test block or used via keybinding.
-
->lua
-    vim.keymap.set("n", "<leader>to", "<cmd>Specto toggle only<CR>", { desc = "Toggle test only" })
-    vim.keymap.set("n", "<leader>ts", "<cmd>Specto toggle skip<CR>", { desc = "Toggle test skip" })
-    vim.keymap.set("n", "<leader>tt", "<cmd>Specto toggle todo<CR>", { desc = "Toggle test todo" })
 <
 
 
@@ -91,25 +75,23 @@ CONFIGURATION                                      *specto.nvim-configuration*
 Specto comes with the following defaults:
 
 >lua
-    require("specto").setup({ -- BEGIN_DEFAULT_OPTS
+    ---@type specto.Config
+    {
+      ---@type specto.Exclude
       exclude = {
         filetypes = { -- exclude certain files by default
           "help",
         }
       },
+      ---@type specto.Languages
       languages = {
         -- set default config for all defined languages
-        ["*"] = {
-          filetypes = {},
-          file_patterns = {},
-          features = {},
-        },
-        -- ... other languages
       }
     })
 <
 
-See config.lua <./lua/specto/config.lua> for more details.
+See also config.lua <./lua/specto/config.lua> and types.lua
+<./lua/specto/types.lua> declaration.
 
 
 LANGUAGE SETTINGS ~
@@ -127,14 +109,51 @@ Each language can define an individual set for `only` and `skip` features.
       features = {
         -- subset of criteria of each feature
         only = { -- or skip, todo
-          flag = "only", -- identfier name
-          keywords = { "it", "describe", "test" }, -- defines on which blocks it can be attached to
-          prefix = false, -- position of flag, false adds flag at the end of a keyword
-          separator = ".", -- defines if a flag came with a certain mark eg. `describe.only`
+          flag = "only", -- Defines the actual flag name to be toggled
+          keywords = { "it", "describe", "test" }, -- Defines on which blocks it can be attached to
+          prefix = false, -- Defines position of flag, false adds flag at the end of a keyword
+          separator = ".", -- Defines the separator between keyword and flag
         },
       },
     }
 <
+
+
+COMMANDS ~
+
+>lua
+    :Specto toggle skip
+    :Specto toggle only
+    :Specto toggle todo
+    :Specto jump next
+    :Specto jump prev
+<
+
+
+  [!NOTE] The feature set depends on the respective language and its testing
+  framework.
+
+KEYBINDINGS ~
+
+The provided commands can either be called directly via `:Specto toggle *`
+within a test block or used via keybinding.
+
+>lua
+    -- Toggle bindings
+    vim.keymap.set("n", "<leader>to", "<cmd>Specto toggle only<CR>", { desc = "Toggle test only" })
+    vim.keymap.set("n", "<leader>ts", "<cmd>Specto toggle skip<CR>", { desc = "Toggle test skip" })
+    vim.keymap.set("n", "<leader>tt", "<cmd>Specto toggle todo<CR>", { desc = "Toggle test todo" })
+    
+    -- Navigation bindings
+    vim.keymap.set("n", "]t", "<cmd>Specto jump next<CR>", { desc = "Go to next toggle" })
+    vim.keymap.set("n", "[t", "<cmd>Specto jump prev<CR>", { desc = "Go to previous toggle" })
+<
+
+
+CONTRIBUTING                                        *specto.nvim-contributing*
+
+All contributions are welcome! Just open a pull request. Please read
+CONTRIBUTING.md <./CONTRIBUTING.md>.
 
 Generated by panvimdoc <https://github.com/kdheepak/panvimdoc>
 
