@@ -2,8 +2,8 @@
 
 # Specto.nvim
 
-[![Lua](https://img.shields.io/badge/Lua-blue.svg?style=for-the-badge&logo=lua)](http://www.lua.org)
-[![Neovim](https://img.shields.io/badge/Neovim%200.9+-green.svg?style=for-the-badge&logo=neovim)](https://neovim.io)
+[![Lua](https://img.shields.io/badge/Lua-blue.svg?style=flat-square&logo=lua&color=000080&labelColor=000080)](http://www.lua.org)
+[![Neovim](https://img.shields.io/badge/v0.10%2B-green.svg?style=flat-square&logo=neovim&logoColor=fff)](https://neovim.io)
 
 Specto is a Neovim plugin that enables dynamic test control through modifier
 toggles. It provides framework-specific controls to mark tests as "only",
