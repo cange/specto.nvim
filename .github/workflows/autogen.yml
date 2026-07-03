@@ -19,7 +19,7 @@ jobs:
         uses: kdheepak/panvimdoc@main
         with:
           description: "A Neovim plugin that allows you to toggle test blocks on/off."
-          version: "NVIM v0.9.0"
+          version: "NVIM v0.10.0"
           vimdoc: ${{ github.event.repository.name }}
       - name: formatting via stylua
         uses: JohnnyMorganz/stylua-action@v5

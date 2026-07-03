@@ -61,7 +61,7 @@ describe('context', () => {
 ### Requirements
 
 - Neovim >= 0.9.0
-- [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
+- [nvim-treesitter](https://github.com/neovim-treesitter/nvim-treesitter)
 
 ### Installation
 
@@ -71,7 +71,7 @@ Install the plugin with your preferred package manager:
 -- lazy.nvim
 {
   "cange/specto.nvim",
-  dependencies = "nvim-treesitter/nvim-treesitter",
+  dependencies = "neovim-treesitter/nvim-treesitter",
   ---@type specto.Config
   opts = {
     -- your configuration comes here or leave it empty to use the default settings

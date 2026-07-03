@@ -35,6 +35,7 @@ releases are managed.
 
 1. Go to GitHub Releases
 2. Click "Draft a new release"
-3. Create a new tag following [semver](https://semver.org/) (e.g. `v1.0.0`)
+3. Create a new tag following [SemVer](https://semver.org/) (e.g. `v1.0.0`)
+   - updates docs within `doc/` automatically
 4. Click "Generate release notes"
 5. Review and publish
