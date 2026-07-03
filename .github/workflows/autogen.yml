@@ -1,0 +1,33 @@
+---
+name: autogen
+
+"on":
+  push:
+    tags:
+      - v*
+
+permissions:
+  contents: write
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    name: autogen
+    steps:
+      - uses: actions/checkout@v2
+      - name: Generate docs with panvimdoc
+        uses: kdheepak/panvimdoc@main
+        with:
+          description: "A Neovim plugin that allows you to toggle test blocks on/off."
+          version: "NVIM v0.9.0"
+          vimdoc: ${{ github.event.repository.name }}
+      - name: formatting via stylua
+        uses: JohnnyMorganz/stylua-action@v5
+        with:
+          args: --config-path=.stylua.toml lua/
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: 2.5.2
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "chore(autogen): docs + formatting"
+          branch: ${{ github.head_ref }}
