@@ -49,7 +49,7 @@ GETTING STARTED                                  *specto.nvim-getting-started*
 REQUIREMENTS ~
 
 - Neovim >= 0.9.0
-- nvim-treesitter <https://github.com/nvim-treesitter/nvim-treesitter>
+- nvim-treesitter <https://github.com/neovim-treesitter/nvim-treesitter>
 
 
 INSTALLATION ~
@@ -60,7 +60,7 @@ Install the plugin with your preferred package manager:
     -- lazy.nvim
     {
       "cange/specto.nvim",
-      dependencies = "nvim-treesitter/nvim-treesitter",
+      dependencies = "neovim-treesitter/nvim-treesitter",
       ---@type specto.Config
       opts = {
         -- your configuration comes here or leave it empty to use the default settings
@@ -101,11 +101,11 @@ Each language can define an individual set for `only` and `skip` features.
 >lua
     javascript = { -- example: "ruby", etc.
       filetypes = { "javascript", "typescript" }, -- a subset of supported language
-    
+
       -- Files or directories where tests can be found.
       -- Expects an array of string patterns that can be used with `string.match`.
       file_patterns = {  }, -- eg. `{ "__tests__/", "%.?spec%." }`
-    
+
       features = {
         -- subset of criteria of each feature
         only = { -- or skip, todo
@@ -143,7 +143,7 @@ within a test block or used via keybinding.
     vim.keymap.set("n", "<leader>to", "<cmd>Specto toggle only<CR>", { desc = "Toggle test only" })
     vim.keymap.set("n", "<leader>ts", "<cmd>Specto toggle skip<CR>", { desc = "Toggle test skip" })
     vim.keymap.set("n", "<leader>tt", "<cmd>Specto toggle todo<CR>", { desc = "Toggle test todo" })
-    
+
     -- Navigation bindings
     vim.keymap.set("n", "]t", "<cmd>Specto jump next<CR>", { desc = "Go to next toggle" })
     vim.keymap.set("n", "[t", "<cmd>Specto jump prev<CR>", { desc = "Go to previous toggle" })
