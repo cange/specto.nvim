@@ -1,5 +1,5 @@
 *specto.nvim.txt* A Neovim plugin that allows you to toggle test blocks on/off.
-                                 For NVIM v0.10.0    Last change: 2026 July 03
+                                 For NVIM v0.10.0    Last change: 2026 July 04
 
 ==============================================================================
 Table of Contents                              *specto.nvim-table-of-contents*
@@ -49,7 +49,7 @@ GETTING STARTED                                  *specto.nvim-getting-started*
 
 REQUIREMENTS ~
 
-- Neovim >= 0.9.0
+- Neovim >= 0.10.0
 - nvim-treesitter <https://github.com/neovim-treesitter/nvim-treesitter>
 
 
