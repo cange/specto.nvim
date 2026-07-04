@@ -60,7 +60,7 @@ describe('context', () => {
 
 ### Requirements
 
-- Neovim >= 0.9.0
+- Neovim >= 0.10.0
 - [nvim-treesitter](https://github.com/neovim-treesitter/nvim-treesitter)
 
 ### Installation
